@@ -11,6 +11,7 @@ class RawDelightToast extends StatefulWidget {
   final DelightSnackbarPosition snackbarPosition;
   final Function() getscaleFactor;
   final Function() getPosition;
+  final double? topMargin;
 
   final Function() onRemove;
   const RawDelightToast(
@@ -23,6 +24,7 @@ class RawDelightToast extends StatefulWidget {
       this.autoDismiss = true,
       required this.getPosition,
       this.animationCurve,
+      this.topMargin,
       required this.getscaleFactor});
 
   @override
@@ -66,11 +68,21 @@ class RawDelightToastState extends State<RawDelightToast> {
           )
       ],
       child: Dismissible(
-          key: UniqueKey(),
-          onDismissed: (direction) {
-            widget.onRemove();
-          },
-          child: widget.child),
+        key: UniqueKey(),
+        direction: DismissDirection.vertical,
+        confirmDismiss: (direction) async {
+          return direction == DismissDirection.up;
+        },
+        onDismissed: (direction) {
+          widget.onRemove();
+        },
+        child: Dismissible(
+            key: UniqueKey(),
+            onDismissed: (direction) {
+              widget.onRemove();
+            },
+            child: widget.child),
+      ),
     );
   }
 
@@ -81,7 +93,7 @@ class RawDelightToastState extends State<RawDelightToast> {
       key: positionedKey,
       curve: Curves.easeOutBack,
       top: widget.snackbarPosition == DelightSnackbarPosition.top
-          ? widget.getPosition() + 70
+          ? widget.getPosition() + (widget.topMargin ?? kToolbarHeight)
           : null,
       bottom: widget.snackbarPosition == DelightSnackbarPosition.bottom
           ? widget.getPosition() + 70

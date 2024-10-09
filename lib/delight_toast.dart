@@ -31,6 +31,8 @@ class DelightToastBar {
   /// Info on each snackbar
   late final SnackBarInfo info;
 
+  final double? topMargin;
+
   /// Initialise Delight Toastbar with required parameters
   DelightToastBar(
       {this.snackbarDuration = const Duration(milliseconds: 5000),
@@ -38,6 +40,7 @@ class DelightToastBar {
       required this.builder,
       this.animationDuration = const Duration(milliseconds: 700),
       this.autoDismiss = false,
+      this.topMargin,
       this.animationCurve})
       : assert(
             snackbarDuration.inMilliseconds > animationDuration.inMilliseconds);
@@ -66,6 +69,7 @@ class DelightToastBar {
         getscaleFactor: () => calculateScaleFactor(_toastBars, this),
         snackbarDuration: snackbarDuration,
         onRemove: remove,
+        topMargin: topMargin,
         child: builder.call(context),
       ),
     );

@@ -33,6 +33,8 @@ class DelightToastBar {
 
   final double? topMargin;
 
+  final double? bottomMargin;
+
   /// Initialise Delight Toastbar with required parameters
   DelightToastBar(
       {this.snackbarDuration = const Duration(milliseconds: 5000),
@@ -41,6 +43,7 @@ class DelightToastBar {
       this.animationDuration = const Duration(milliseconds: 700),
       this.autoDismiss = false,
       this.topMargin,
+      this.bottomMargin,
       this.animationCurve})
       : assert(
             snackbarDuration.inMilliseconds > animationDuration.inMilliseconds);
@@ -70,6 +73,7 @@ class DelightToastBar {
         snackbarDuration: snackbarDuration,
         onRemove: remove,
         topMargin: topMargin,
+        bottomMargin: bottomMargin,
         child: builder.call(context),
       ),
     );

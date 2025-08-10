@@ -12,6 +12,7 @@ class RawDelightToast extends StatefulWidget {
   final Function() getscaleFactor;
   final Function() getPosition;
   final double? topMargin;
+  final double? bottomMargin;
 
   final Function() onRemove;
   const RawDelightToast(
@@ -25,6 +26,7 @@ class RawDelightToast extends StatefulWidget {
       required this.getPosition,
       this.animationCurve,
       this.topMargin,
+      this.bottomMargin,
       required this.getscaleFactor});
 
   @override
@@ -96,7 +98,7 @@ class RawDelightToastState extends State<RawDelightToast> {
           ? widget.getPosition() + (widget.topMargin ?? kToolbarHeight)
           : null,
       bottom: widget.snackbarPosition == DelightSnackbarPosition.bottom
-          ? widget.getPosition() + 70
+          ? widget.getPosition() + (widget.bottomMargin ?? 70)
           : null,
       left: 0,
       right: 0,

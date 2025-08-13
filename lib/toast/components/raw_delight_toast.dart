@@ -13,6 +13,8 @@ class RawDelightToast extends StatefulWidget {
   final Function() getPosition;
   final double? topMargin;
   final double? bottomMargin;
+  final double? leftMargin;
+  final double? rightMargin;
 
   final Function() onRemove;
   const RawDelightToast(
@@ -27,6 +29,8 @@ class RawDelightToast extends StatefulWidget {
       this.animationCurve,
       this.topMargin,
       this.bottomMargin,
+      this.leftMargin,
+      this.rightMargin,
       required this.getscaleFactor});
 
   @override
@@ -50,14 +54,9 @@ class RawDelightToastState extends State<RawDelightToast> {
       },
       effects: [
         SlideEffect(
-            begin: Offset(
-                0,
-                widget.snackbarPosition == DelightSnackbarPosition.bottom
-                    ? 2
-                    : -2),
+            begin: Offset(0, widget.snackbarPosition == DelightSnackbarPosition.bottom ? 2 : -2),
             end: Offset.zero,
-            duration: Duration(
-                milliseconds: 2 * widget.animationDuration.inMilliseconds),
+            duration: Duration(milliseconds: 2 * widget.animationDuration.inMilliseconds),
             curve: widget.animationCurve ?? Curves.elasticOut),
         FadeEffect(duration: widget.animationDuration, begin: 0, end: 1),
         if (widget.autoDismiss)
@@ -90,25 +89,27 @@ class RawDelightToastState extends State<RawDelightToast> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedPositioned(
-      duration: Duration(milliseconds: widget.animationDuration.inMilliseconds),
-      key: positionedKey,
-      curve: Curves.easeOutBack,
-      top: widget.snackbarPosition == DelightSnackbarPosition.top
-          ? widget.getPosition() + (widget.topMargin ?? kToolbarHeight)
-          : null,
-      bottom: widget.snackbarPosition == DelightSnackbarPosition.bottom
-          ? widget.getPosition() + (widget.bottomMargin ?? 70)
-          : null,
-      left: 0,
-      right: 0,
-      child: Material(
-        color: Colors.transparent,
-        child: AnimatedScale(
-          duration: widget.animationDuration,
-          curve: Curves.bounceOut,
-          scale: widget.getPosition() == 0 ? 1 : widget.getscaleFactor(),
-          child: getChildBasedOnDissmiss(widget.child),
+    return SafeArea(
+      child: AnimatedPositioned(
+        duration: Duration(milliseconds: widget.animationDuration.inMilliseconds),
+        key: positionedKey,
+        curve: Curves.easeOutBack,
+        top: widget.snackbarPosition == DelightSnackbarPosition.top
+            ? widget.getPosition() + (widget.topMargin ?? kToolbarHeight)
+            : null,
+        bottom: widget.snackbarPosition == DelightSnackbarPosition.bottom
+            ? widget.getPosition() + (widget.bottomMargin ?? 70)
+            : null,
+        left: widget.leftMargin ?? 0,
+        right: widget.rightMargin ?? 0,
+        child: Material(
+          color: Colors.transparent,
+          child: AnimatedScale(
+            duration: widget.animationDuration,
+            curve: Curves.bounceOut,
+            scale: widget.getPosition() == 0 ? 1 : widget.getscaleFactor(),
+            child: getChildBasedOnDissmiss(widget.child),
+          ),
         ),
       ),
     );

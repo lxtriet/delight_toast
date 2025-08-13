@@ -89,27 +89,28 @@ class RawDelightToastState extends State<RawDelightToast> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: AnimatedPositioned(
-        duration: Duration(milliseconds: widget.animationDuration.inMilliseconds),
-        key: positionedKey,
-        curve: Curves.easeOutBack,
-        top: widget.snackbarPosition == DelightSnackbarPosition.top
-            ? widget.getPosition() + (widget.topMargin ?? kToolbarHeight)
-            : null,
-        bottom: widget.snackbarPosition == DelightSnackbarPosition.bottom
-            ? widget.getPosition() + (widget.bottomMargin ?? 70)
-            : null,
-        left: widget.leftMargin ?? 0,
-        right: widget.rightMargin ?? 0,
-        child: Material(
-          color: Colors.transparent,
-          child: AnimatedScale(
-            duration: widget.animationDuration,
-            curve: Curves.bounceOut,
-            scale: widget.getPosition() == 0 ? 1 : widget.getscaleFactor(),
-            child: getChildBasedOnDissmiss(widget.child),
-          ),
+    final mediaQuery = MediaQuery.of(context);
+    final safePadding = mediaQuery.padding;
+    
+    return AnimatedPositioned(
+      duration: Duration(milliseconds: widget.animationDuration.inMilliseconds),
+      key: positionedKey,
+      curve: Curves.easeOutBack,
+      top: widget.snackbarPosition == DelightSnackbarPosition.top
+          ? widget.getPosition() + (widget.topMargin ?? kToolbarHeight) + safePadding.top
+          : null,
+      bottom: widget.snackbarPosition == DelightSnackbarPosition.bottom
+          ? widget.getPosition() + (widget.bottomMargin ?? 70) + safePadding.bottom
+          : null,
+      left: (widget.leftMargin ?? 0) + safePadding.left,
+      right: (widget.rightMargin ?? 0) + safePadding.right,
+      child: Material(
+        color: Colors.transparent,
+        child: AnimatedScale(
+          duration: widget.animationDuration,
+          curve: Curves.bounceOut,
+          scale: widget.getPosition() == 0 ? 1 : widget.getscaleFactor(),
+          child: getChildBasedOnDissmiss(widget.child),
         ),
       ),
     );
